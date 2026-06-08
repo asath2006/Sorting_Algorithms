@@ -1,0 +1,115 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *head = NULL;
+
+struct node* createNode(int data)
+{
+    struct node *nn = (struct node*)malloc(sizeof(struct node));
+    nn->data = data;
+    nn->next = NULL;
+    return nn;
+}
+
+void insert(int data)
+{
+    struct node *nn = createNode(data);
+
+    if(head == NULL)
+    {
+        head = nn;
+        return;
+    }
+
+    struct node *temp = head;
+
+    while(temp->next != NULL)
+        temp = temp->next;
+
+    temp->next = nn;
+}
+
+void bubbleSort()
+{
+    if(head == NULL || head->next == NULL)
+        return;
+
+    int swapped;
+
+    do
+    {
+        swapped = 0;
+
+        struct node *curr = head;
+        struct node *prev = NULL;
+
+        while(curr->next != NULL)
+        {
+            struct node *nextNode = curr->next;
+
+            if(curr->data > nextNode->data)
+            {
+                /* swap nodes */
+
+                curr->next = nextNode->next;
+                nextNode->next = curr;
+
+                if(prev == NULL)
+                    head = nextNode;
+                else
+                    prev->next = nextNode;
+
+                prev = nextNode;
+                swapped = 1;
+            }
+            else
+            {
+                prev = curr;
+                curr = curr->next;
+            }
+        }
+
+    } while(swapped);
+}
+
+void display()
+{
+    struct node *temp = head;
+
+    while(temp != NULL)
+    {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+
+    printf("\n");
+}
+
+int main()
+{
+    int n, x;
+
+    scanf("%d", &n);
+
+    for(int i = 0; i < n; i++)
+    {
+        scanf("%d", &x);
+        insert(x);
+    }
+
+    printf("Before Sorting:\n");
+    display();
+
+    bubbleSort();
+
+    printf("After Sorting:\n");
+    display();
+
+    return 0;
+}
