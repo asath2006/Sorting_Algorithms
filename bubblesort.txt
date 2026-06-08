@@ -1,0 +1,428 @@
+If you're asking what happens with a pair like 1 and 2 during bubble sort:
+
+Suppose the list is:
+
+1 -> 2 -> 5
+
+At some iteration:
+
+curr     -> 1
+nextNode -> 2
+
+The condition is:
+
+if(curr->data > nextNode->data)
+
+which becomes:
+
+if(1 > 2)
+
+This is false.
+
+So no swap occurs.
+
+The code executes the else part:
+
+prev = curr;
+curr = curr->next;
+
+Now:
+
+prev -> 1
+curr -> 2
+
+List remains:
+
+1 -> 2 -> 5
+
+Then the next comparison is:
+
+2 and 5
+
+Again:
+
+if(2 > 5)
+
+False, so no swap.
+
+Rule
+If left value > right value ? swap nodes.
+If left value = right value ? leave them as they are and move forward.
+
+Examples:
+
+5 -> 3   => swap
+
+becomes
+
+3 -> 5
+
+but
+
+1 -> 2   => no swap
+
+stays
+
+1 -> 2
+
+because it's already in sorted order.
+
+i initially give 54321 but you 3 4 5only sort after
+
+You're right — I zoomed into the smaller example 5 -> 4 -> 3 to explain the swapping logic. Let's continue with your original input:
+
+5 -> 4 -> 3 -> 2 -> 1
+
+and see the entire bubble sort (node swapping) flow.
+
+Pass 1
+
+Start:
+
+5 -> 4 -> 3 -> 2 -> 1
+Compare 5 and 4
+
+Swap:
+
+4 -> 5 -> 3 -> 2 -> 1
+Compare 5 and 3
+
+Swap:
+
+4 -> 3 -> 5 -> 2 -> 1
+Compare 5 and 2
+
+Swap:
+
+4 -> 3 -> 2 -> 5 -> 1
+Compare 5 and 1
+
+Swap:
+
+4 -> 3 -> 2 -> 1 -> 5
+
+End of Pass 1:
+
+4 -> 3 -> 2 -> 1 -> 5
+
+Notice that the largest element (5) has reached the end.
+
+Pass 2
+
+Start:
+
+4 -> 3 -> 2 -> 1 -> 5
+Compare 4 and 3
+
+Swap:
+
+3 -> 4 -> 2 -> 1 -> 5
+Compare 4 and 2
+
+Swap:
+
+3 -> 2 -> 4 -> 1 -> 5
+Compare 4 and 1
+
+Swap:
+
+3 -> 2 -> 1 -> 4 -> 5
+Compare 4 and 5
+
+No swap.
+
+End of Pass 2:
+
+3 -> 2 -> 1 -> 4 -> 5
+
+Now 4 and 5 are in their final positions.
+
+Pass 3
+
+Start:
+
+3 -> 2 -> 1 -> 4 -> 5
+Compare 3 and 2
+
+Swap:
+
+2 -> 3 -> 1 -> 4 -> 5
+Compare 3 and 1
+
+Swap:
+
+2 -> 1 -> 3 -> 4 -> 5
+Compare 3 and 4
+
+No swap.
+
+Compare 4 and 5
+
+No swap.
+
+End of Pass 3:
+
+2 -> 1 -> 3 -> 4 -> 5
+Pass 4
+
+Start:
+
+2 -> 1 -> 3 -> 4 -> 5
+Compare 2 and 1
+
+Swap:
+
+1 -> 2 -> 3 -> 4 -> 5
+Compare 2 and 3
+
+No swap.
+
+Compare 3 and 4
+
+No swap.
+
+Compare 4 and 5
+
+No swap.
+
+End of Pass 4:
+
+1 -> 2 -> 3 -> 4 -> 5
+Pass 5
+
+Start:
+
+1 -> 2 -> 3 -> 4 -> 5
+
+Comparisons:
+
+1 vs 2  -> no swap
+2 vs 3  -> no swap
+3 vs 4  -> no swap
+4 vs 5  -> no swap
+
+No swaps occurred.
+
+swapped = 0;
+
+Bubble sort stops.
+
+Summary
+Initial:
+5 -> 4 -> 3 -> 2 -> 1
+
+Pass 1:
+4 -> 3 -> 2 -> 1 -> 5
+
+Pass 2:
+3 -> 2 -> 1 -> 4 -> 5
+
+Pass 3:
+2 -> 1 -> 3 -> 4 -> 5
+
+Pass 4:
+1 -> 2 -> 3 -> 4 -> 5
+
+Pass 5:
+No swaps ? Stop
+
+This is exactly what the node-swapping bubble sort does: in each pass, the largest unsorted node "bubbles" toward the end by repeatedly swapping adjacent nodes.
+
+curr->next = nextNode->next;
+nextNode->next = curr;
+
+if(prev == NULL)
+    head = nextNode;
+else
+    prev->next = nextNode; using 54321 give the diagram for understaning
+
+Let's use your exact input:
+
+5 -> 4 -> 3 -> 2 -> 1
+
+and trace the first swap using:
+
+curr->next = nextNode->next;
+nextNode->next = curr;
+
+if(prev == NULL)
+    head = nextNode;
+else
+    prev->next = nextNode;
+Initial State
+head
+ |
+ v
++---+    +---+    +---+    +---+    +---+
+| 5 |--->| 4 |--->| 3 |--->| 2 |--->| 1 |-->NULL
++---+    +---+    +---+    +---+    +---+
+  ^
+  |
+curr
+
+nextNode
+   ^
+   |
+   4
+
+prev = NULL
+
+So:
+
+curr     = 5
+nextNode = 4
+prev     = NULL
+
+Since:
+
+5 > 4
+
+we swap the nodes.
+
+Step 1
+curr->next = nextNode->next;
+
+Means:
+
+5->next = 4->next;
+
+Since:
+
+4->next = 3
+
+Now:
+
++---+         +---+    +---+    +---+
+| 5 |-------->| 3 |--->| 2 |--->| 1 |
++---+         +---+    +---+    +---+
+
++---+
+| 4 |
++---+
+
+Diagram:
+
+5 -> 3 -> 2 -> 1
+
+4
+
+The link between 5 and 4 is broken.
+
+Step 2
+nextNode->next = curr;
+
+Means:
+
+4->next = 5;
+
+Now:
+
+4 -> 5 -> 3 -> 2 -> 1
+
+Diagram:
+
++---+    +---+    +---+    +---+    +---+
+| 4 |--->| 5 |--->| 3 |--->| 2 |--->| 1 |
++---+    +---+    +---+    +---+    +---+
+
+But head is still pointing to 5!
+
+head
+ |
+ v
+5 -> 3 -> 2 -> 1
+
+4 -> 5 ...
+
+So we need one more step.
+
+Step 3
+
+Since:
+
+prev == NULL
+
+execute:
+
+head = nextNode;
+
+Means:
+
+head = 4;
+
+Now:
+
+head
+ |
+ v
+4 -> 5 -> 3 -> 2 -> 1
+
+Perfect.
+
+Visual Summary
+Before
+head
+ |
+ v
+5 -> 4 -> 3 -> 2 -> 1
+^    ^
+|    |
+curr nextNode
+After Step 1
+5 -> 3 -> 2 -> 1
+
+4
+After Step 2
+4 -> 5 -> 3 -> 2 -> 1
+After Step 3
+head
+ |
+ v
+4 -> 5 -> 3 -> 2 -> 1
+Next Swap (5 and 3)
+
+Now pointers are:
+
+head
+ |
+ v
+4 -> 5 -> 3 -> 2 -> 1
+     ^    ^
+     |    |
+   curr nextNode
+
+prev = 4
+
+Notice now prev is not NULL.
+
+After swapping 5 and 3:
+
+Step 1
+curr->next = nextNode->next;
+5->next = 2
+4 -> 5 -> 2 -> 1
+
+3
+Step 2
+nextNode->next = curr;
+3 -> 5 -> 2 -> 1
+Step 3
+
+Now prev != NULL, so:
+
+prev->next = nextNode;
+
+which means:
+
+4->next = 3;
+
+Final:
+
+head
+ |
+ v
+4 -> 3 -> 5 -> 2 -> 1
+
+This line:
+
+prev->next = nextNode;
