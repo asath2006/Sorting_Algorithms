@@ -1,0 +1,486 @@
+
+Get responses tailored to you
+
+Log in to get answers based on saved chats, plus create images and upload files.
+
+
+Log in
+#include <stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node*next;
+};
+ struct node*head;
+struct node*createnode(int data)
+{
+    struct node*nn=(struct node*)malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    return nn;
+}
+void insert(int data)
+{
+    
+        struct node*nn= createnode(data);
+    
+    
+    if(head==NULL)
+    {
+        head=nn;
+    }
+    else
+    {
+        struct node*temp=head;
+        while(temp->next!=NULL)
+        {
+            temp=temp->next;
+        }
+        temp->next=nn;
+    }
+}
+struct node*gettail(struct node*head)
+{
+    struct node*cur=head;
+    while(cur!=NULL &&cur->next!=NULL)
+    {
+        cur=cur->next;
+    }
+    return cur;
+}
+struct node*partion(struct node*start,struct node*end)
+{
+    int pivot=end->data;
+    struct node*pin=start;
+    struct node*cur=start;
+    while(cur!=end)
+    {
+        if(cur->data<pivot)
+        {
+            int temp=cur->data;
+            cur->data=pin->data;
+            pin->data=temp;
+            
+            pin=pin->next;
+        }
+        cur=cur->next;
+    }
+    int temp=pin->data;
+    pin->data=end->data;
+    end->data=temp;
+    return pin;
+}
+void quicksort(struct node*start,struct node*end)
+{
+    if(start==NULL || start==end|| start==end->next)
+    {
+        return;
+    }
+    struct node*pivot=partion(start,end);
+    struct node*temp=start;
+    struct node*prev=NULL;
+    while(temp!=pivot)
+    {
+        prev=temp;
+        temp=temp->next;
+    }
+   if(prev!=NULL)
+        quicksort(start,prev);
+    if(pivot->next!=NULL)    
+        quicksort(pivot->next,end);
+    }
+    
+
+void display()
+{
+    struct node*temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d",temp->data);
+        temp=temp->next;
+    }
+    printf("\n");
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    int a[n];
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    for(int i=0;i<n;i++)
+    {
+         insert(a[i]);
+    }
+    printf("Before sorting");
+    display();
+    quicksort(head,gettail(head));
+    printf("\nAfter sorting");
+    display();
+
+    return 0;
+}explain the code with 54321 i want full flow of code how each line work
+
+I'll walk through your linked-list Quick Sort code using the input:
+
+5
+5 4 3 2 1
+The linked list becomes:
+
+5 -> 4 -> 3 -> 2 -> 1
+1. Structure Definition
+struct node
+{
+    int data;
+    struct node* next;
+};
+Each node contains:
+
+data	next
+value	address of next node
+Example:
+
++-----+------+      +-----+------+
+|  5  |   *-------> |  4  |   *---->
++-----+------+      +-----+------+
+2. Global Head
+struct node* head;
+head stores the address of the first node.
+
+Initially:
+
+head = NULL
+3. Creating Nodes
+struct node* createnode(int data)
+{
+    struct node* nn=(struct node*)malloc(sizeof(struct node));
+
+    nn->data=data;
+    nn->next=NULL;
+
+    return nn;
+}
+When:
+
+createnode(5);
+Memory is allocated:
+
++-----+------+
+|  5  | NULL |
++-----+------+
+and returned.
+
+4. Insert Function
+First insertion:
+
+insert(5);
+if(head==NULL)
+{
+    head=nn;
+}
+List:
+
+head
+ |
+ v
+5 -> NULL
+Second insertion:
+
+insert(4);
+temp=head;
+temp points to 5.
+
+Loop:
+
+while(temp->next!=NULL)
+Not entered because:
+
+5->next = NULL
+Then:
+
+temp->next=nn;
+List becomes:
+
+5 -> 4 -> NULL
+After all insertions:
+
+head
+ |
+ v
+5 -> 4 -> 3 -> 2 -> 1 -> NULL
+5. gettail()
+Called as:
+
+gettail(head);
+Code:
+
+struct node*cur=head;
+cur = node(5)
+
+Loop:
+
+while(cur!=NULL && cur->next!=NULL)
+{
+    cur=cur->next;
+}
+Movement:
+
+5 -> 4 -> 3 -> 2 -> 1
+Stops at:
+
+1
+Returns node containing 1.
+
+6. Quick Sort Call
+quicksort(head,gettail(head));
+Equivalent to:
+
+quicksort(5,1)
+Current list:
+
+5 -> 4 -> 3 -> 2 -> 1
+7. First Partition
+Called:
+
+partition(start=5,end=1)
+Pivot Selection
+int pivot=end->data;
+Pivot:
+
+pivot = 1
+Initialize
+pin=start;
+cur=start;
+Both point to node 5.
+
+pin -> 5
+cur -> 5
+Iteration 1
+cur = 5
+Check:
+
+5 < 1 ?
+False.
+
+Move:
+
+cur=cur->next;
+Now:
+
+cur -> 4
+pin -> 5
+Iteration 2
+4 < 1 ?
+False.
+
+Move:
+
+cur -> 3
+Iteration 3
+3 < 1 ?
+False.
+
+Move:
+
+cur -> 2
+Iteration 4
+2 < 1 ?
+False.
+
+Move:
+
+cur -> 1
+Loop ends because:
+
+while(cur!=end)
+Now:
+
+pin -> 5
+end -> 1
+Final Pivot Swap
+temp=pin->data;
+pin->data=end->data;
+end->data=temp;
+Swap:
+
+5 ? 1
+List becomes:
+
+1 -> 4 -> 3 -> 2 -> 5
+Return:
+
+pivot node = first node (value 1)
+8. Back to quicksort()
+pivot = node containing 1
+Find previous node:
+
+temp=start;
+prev=NULL;
+Loop:
+
+while(temp!=pivot)
+Since pivot=start,
+
+loop never executes.
+
+So:
+
+prev = NULL
+Left Recursion
+if(prev!=NULL)
+False.
+
+No left recursion.
+
+Right Recursion
+quicksort(pivot->next,end);
+Calls:
+
+quicksort(4,5)
+Sublist:
+
+4 -> 3 -> 2 -> 5
+9. Second Partition
+Pivot:
+
+5
+Current:
+
+4 -> 3 -> 2 -> 5
+cur=4
+4 < 5
+True.
+
+Swap with pin (same node).
+
+Move pin:
+
+pin -> 3
+cur=3
+3 < 5
+True.
+
+Move pin:
+
+pin -> 2
+cur=2
+2 < 5
+True.
+
+Move pin:
+
+pin -> 5
+Final swap:
+
+5 ? 5
+No change.
+
+List:
+
+1 -> 4 -> 3 -> 2 -> 5
+Pivot at last node.
+
+10. Left Recursive Call
+Now:
+
+quicksort(4,2)
+Sublist:
+
+4 -> 3 -> 2
+11. Third Partition
+Pivot:
+
+2
+Current:
+
+4 -> 3 -> 2
+cur=4
+4 < 2 ?
+False.
+
+cur=3
+3 < 2 ?
+False.
+
+Final swap:
+
+4 ? 2
+List becomes:
+
+1 -> 2 -> 3 -> 4 -> 5
+Pivot now at node containing 2.
+
+12. Recursive Calls
+Left side:
+
+none
+Right side:
+
+quicksort(3,4)
+13. Fourth Partition
+Sublist:
+
+3 -> 4
+Pivot:
+
+4
+cur=3
+3 < 4
+True.
+
+Move pin to 4.
+
+Final swap:
+
+4 ? 4
+No change.
+
+List:
+
+1 -> 2 -> 3 -> 4 -> 5
+14. Base Conditions
+Eventually calls become:
+
+quicksort(3,3);
+quicksort(5,5);
+These satisfy:
+
+if(start==NULL ||
+   start==end ||
+   start==end->next)
+{
+    return;
+}
+So recursion stops.
+
+Final Output
+Before sorting:
+
+5 4 3 2 1
+After sorting:
+
+1 2 3 4 5
+Important Idea
+Your implementation does not rearrange nodes.
+
+Instead, it sorts by swapping the data values inside nodes:
+
+int temp=cur->data;
+cur->data=pin->data;
+pin->data=temp;
+and
+
+temp=pin->data;
+pin->data=end->data;
+end->data=temp;
+So the node links remain:
+
+node1 -> node2 -> node3 -> node4 -> node5
+Only the data fields change until the list becomes sorted. This makes Quick Sort on a linked list much simpler than physically moving nodes around.
+
+
+
+Voice
