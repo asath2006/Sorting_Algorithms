@@ -1,0 +1,616 @@
+Get responses tailored to you
+
+Log in to get answers based on saved chats, plus create images and upload files.
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+    int data;
+    struct node*next;
+};
+  struct node*head=NULL;
+void insert(int data)
+{
+    struct node*nn=(struct node*)malloc(sizeof(struct node));
+    nn->data=data;
+    nn->next=NULL;
+    if(head==NULL)
+    {
+        head=nn;
+        
+    }
+    else
+    {
+        struct node*temp=head;
+        while(temp->next!=NULL)
+        {
+            temp=temp->next;
+        }
+        temp->next=nn;
+    }
+}
+struct node*middle(struct node*head)
+{
+    struct node*fast=head->next;
+    struct node*slow=head;
+    while(fast!=NULL&&fast->next!=NULL)
+    {
+        slow=slow->next;
+        fast=fast->next->next;
+    }
+    return slow;
+    
+}
+struct node*merge(struct node*a,struct node*b)
+{
+    if(a==NULL)
+    {
+        return b;
+    }
+    if(b==NULL)
+    {
+        return a;
+    }
+    struct node*result;
+    if(a->data<b->data)
+    {
+        result=a;
+       result->next=merge(a->next,b);
+    }
+    else
+    {
+        result=b;
+         result->next=merge(b->next,a);
+    }
+    return  result;
+}
+struct node* mergesort(struct node*head)
+{
+      if(head == NULL || head->next == NULL)
+        return head;
+     struct node*middles= middle(head);
+     struct node*nextmiddle=middles->next;
+     middles->next=NULL;
+    struct node*left= mergesort(head);
+    struct node*right= mergesort(nextmiddle);
+     return merge(left,right);
+      
+}
+void display()
+{
+    struct node*temp=head;
+    while(temp!=NULL)
+    {
+        printf("%d",temp->data);
+        temp=temp->next;
+    }
+}
+int main()
+{
+    int n;
+    scanf("%d",&n);
+    int a[n];
+    for(int i=0;i<n;i++)
+    {
+        scanf("%d",&a[i]);
+    }
+    for(int i=0;i<n;i++)
+    {
+        insert(a[i]);
+    }
+    printf("Before sorting:");
+    display();
+    printf("\nAfter sortin:");
+   head= mergesort(head);
+    display();
+}explain the recursion flow and how stack strore the functions and each line explain and each process i want and explain the 54321 example
+
+Your program performs Merge Sort on a Linked List using recursion. I'll explain:
+
+    What every function does
+
+    How recursion works internally
+
+    How the call stack stores function calls
+
+    A complete trace for input 5 4 3 2 1
+
+    How merging happens step by step
+
+Initial Linked List
+
+Input:
+
+5 4 3 2 1
+
+After insertion:
+
+head
+ |
+ v
+5 -> 4 -> 3 -> 2 -> 1 -> NULL
+
+1. insert()
+
+void insert(int data)
+{
+    struct node*nn=(struct node*)malloc(sizeof(struct node));
+
+Creates a new node.
+
+Suppose data = 5
+
+nn
+ |
+ v
++-----+------+
+|  5  | NULL |
++-----+------+
+
+nn->data=data;
+nn->next=NULL;
+
+Stores the value and makes next NULL.
+
+if(head==NULL)
+{
+    head=nn;
+}
+
+For first node:
+
+head
+ |
+ v
+5 -> NULL
+
+else
+{
+    struct node*temp=head;
+
+Starts from head.
+
+while(temp->next!=NULL)
+{
+    temp=temp->next;
+}
+
+Moves to last node.
+
+temp->next=nn;
+
+Attaches new node.
+
+After all insertions:
+
+5 -> 4 -> 3 -> 2 -> 1
+
+2. middle()
+
+struct node*middle(struct node*head)
+{
+    struct node*fast=head->next;
+    struct node*slow=head;
+
+Uses Fast-Slow Pointer.
+
+Initial:
+
+5 -> 4 -> 3 -> 2 -> 1
+
+slow=5
+fast=4
+
+First iteration
+
+slow=slow->next;
+
+slow=4
+
+fast=fast->next->next;
+
+4 -> 3 -> 2
+
+fast=2
+
+Second iteration
+
+slow=3
+
+fast=NULL
+
+Loop ends.
+
+Returns:
+
+middle = 3
+
+3. mergesort()
+
+This is the heart of recursion.
+
+Input:
+
+5 -> 4 -> 3 -> 2 -> 1
+
+Call:
+
+mergesort(head)
+
+Base Case
+
+if(head == NULL || head->next == NULL)
+    return head;
+
+If list has:
+
+5
+
+or
+
+NULL
+
+already sorted.
+
+Returns immediately.
+Recursive Splitting
+
+First call:
+
+5 -> 4 -> 3 -> 2 -> 1
+
+Middle = 3
+
+nextmiddle=middles->next;
+
+nextmiddle = 2
+
+middles->next=NULL;
+
+Breaks list:
+
+Left:
+
+5 -> 4 -> 3
+
+Right:
+
+2 -> 1
+
+Then:
+
+left = mergesort(head);
+
+Recursively sort:
+
+5 -> 4 -> 3
+
+right = mergesort(nextmiddle);
+
+Recursively sort:
+
+2 -> 1
+
+RECURSION TREE
+
+For input:
+
+5 4 3 2 1
+
+The recursion tree is:
+
+              5 4 3 2 1
+             /         \
+         5 4 3         2 1
+        /    \        /   \
+      5 4     3      2     1
+     /  \
+    5    4
+
+Every node is a function call.
+CALL STACK FLOW
+
+Suppose execution reaches:
+
+mergesort(5 4 3 2 1)
+
+Stack:
+
+TOP
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Calls left recursion:
+
+mergesort(5 4 3)
+
+Stack:
+
+TOP
+-------------------
+mergesort(5 4 3)
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Calls:
+
+mergesort(5 4)
+
+Stack:
+
+TOP
+-------------------
+mergesort(5 4)
+-------------------
+mergesort(5 4 3)
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Calls:
+
+mergesort(5)
+
+Stack:
+
+TOP
+-------------------
+mergesort(5)
+-------------------
+mergesort(5 4)
+-------------------
+mergesort(5 4 3)
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Base case reached.
+
+Returns 5.
+
+Stack frame removed:
+
+TOP
+-------------------
+mergesort(5 4)
+-------------------
+mergesort(5 4 3)
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Then:
+
+mergesort(4)
+
+Push:
+
+TOP
+-------------------
+mergesort(4)
+-------------------
+mergesort(5 4)
+-------------------
+mergesort(5 4 3)
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Returns 4.
+
+Pop.
+
+Now merge(5,4)
+
+Returns:
+
+4 -> 5
+
+Stack:
+
+TOP
+-------------------
+mergesort(5 4 3)
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Now sort:
+
+3
+
+Returns immediately.
+
+Now merge:
+
+4 -> 5
+and
+3
+
+Result:
+
+3 -> 4 -> 5
+
+Now stack:
+
+TOP
+-------------------
+mergesort(5 4 3 2 1)
+-------------------
+
+Sort right side:
+
+2 -> 1
+
+Split:
+
+2
+1
+
+Both return.
+
+Merge:
+
+1 -> 2
+
+Now final merge:
+
+3 -> 4 -> 5
+1 -> 2
+
+MERGE RECURSION FLOW
+
+Call:
+
+merge(
+3->4->5,
+1->2
+)
+
+Compare:
+
+3 vs 1
+
+1 smaller.
+
+Result:
+
+1
+
+Call:
+
+merge(
+2,
+3->4->5
+)
+
+Compare:
+
+2 vs 3
+
+2 smaller.
+
+Result:
+
+1 -> 2
+
+Call:
+
+merge(
+NULL,
+3->4->5
+)
+
+Base case:
+
+if(a==NULL)
+    return b;
+
+Returns:
+
+3 -> 4 -> 5
+
+Backtracking begins.
+
+Return to previous:
+
+2 -> 3 -> 4 -> 5
+
+Return again:
+
+1 -> 2 -> 3 -> 4 -> 5
+
+How Stack Looks During Merge
+
+When merge starts:
+
+merge(3 4 5,1 2)
+
+Stack:
+
+TOP
+---------------------
+merge(3 4 5,1 2)
+---------------------
+
+Calls:
+
+merge(2,3 4 5)
+
+Stack:
+
+TOP
+---------------------
+merge(2,3 4 5)
+---------------------
+merge(3 4 5,1 2)
+---------------------
+
+Calls:
+
+merge(NULL,3 4 5)
+
+Stack:
+
+TOP
+---------------------
+merge(NULL,3 4 5)
+---------------------
+merge(2,3 4 5)
+---------------------
+merge(3 4 5,1 2)
+---------------------
+
+Returns:
+
+3 4 5
+
+Pop.
+
+Returns:
+
+2 3 4 5
+
+Pop.
+
+Returns:
+
+1 2 3 4 5
+
+Pop.
+
+Stack becomes empty.
+Final Sorted List
+
+1 -> 2 -> 3 -> 4 -> 5 -> NULL
+
+One important correction in your display()
+
+Currently:
+
+printf("%d",temp->data);
+
+Output:
+
+54321
+
+without spaces.
+
+Better:
+
+printf("%d ", temp->data);
+
+Output:
+
+5 4 3 2 1
+
+and after sorting:
+
+1 2 3 4 5
+
+This makes the merge sort result easier to see.
+
+
+
